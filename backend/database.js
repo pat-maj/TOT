@@ -10,7 +10,7 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
         console.log('Connected to the SQLite database.')
 
         db.run(`CREATE TABLE participants (
-                user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                participant_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 tournament_id TEXT, 
                 name TEXT,
                 FOREIGN KEY (tournament_id) REFERENCES tournaments(tournament_id)

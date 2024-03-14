@@ -17,6 +17,7 @@ app.get('/', (req, res, next) => {
 });
 
 require('./app/routes/tournament.server.routes')(app);
+require('./app/routes/participant.server.routes')(app);
 
 app.use((req, res) => {
     res.sendStatus(404);
