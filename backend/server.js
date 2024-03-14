@@ -1,5 +1,10 @@
-const express = require("express");
+const express = require('express');
+const bodyParser = require('body-parser');
+
 const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 const HTTP_PORT = 3333;
 
@@ -11,7 +16,7 @@ app.get('/', (req, res, next) => {
     res.json({'status': 'Alive'});
 });
 
-//require('./app/routes/user.server.routes')(app);
+require('./app/routes/tournament.server.routes')(app);
 
 app.use((req, res) => {
     res.sendStatus(404);
