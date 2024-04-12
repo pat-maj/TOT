@@ -25,6 +25,17 @@ const create_tournament = (req, res) => {
     });
 }
 
+const get_tournament = (req,res) => {
+    let tournament_id = req.params.tournament_id;
+        tournaments.getTournament(tournament_id, (err, result) => {
+            if(err === 404) return res.sendStatus(404)
+            if(err) return res.sendStatus(500)
+    
+            return res.status(200).send(result)
+        })
+    
+    }
+
 function generate_random_string(length) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let result = '';
@@ -34,7 +45,9 @@ function generate_random_string(length) {
     return result;
 }
 
+
 module.exports = {
     init_tournament,
-    create_tournament
+    create_tournament,
+    get_tournament
 }

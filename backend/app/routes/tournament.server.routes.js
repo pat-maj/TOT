@@ -6,5 +6,5 @@ module.exports = function(app) {
 
     app.route("/:tournament_id/tournament")
         .post(tournaments.create_tournament)
-        //.get(tournaments.get_tournament_details);
+        .get(tournaments.get_tournament);
 }

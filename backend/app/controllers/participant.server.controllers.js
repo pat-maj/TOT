@@ -20,6 +20,18 @@ const add_participant = (req, res) => {
     });
 }
 
+const get_participants = (req,res) => {
+    let tournament_id = req.params.tournament_id;
+        participants.getParticipants(tournament_id, (err, result) => {
+            if(err === 404) return res.sendStatus(404)
+            if(err) return res.sendStatus(500)
+    
+            return res.status(200).send(result)
+        })
+    
+    }
+
 module.exports = {
-    add_participant
+    add_participant,
+    get_participants
 }
