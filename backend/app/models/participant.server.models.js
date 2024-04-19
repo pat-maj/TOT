@@ -1,6 +1,7 @@
 const db = require("../../database");
 
 const addParticipant = (participant, done) => {
+
     const sql = "INSERT INTO participants (tournament_id, name) VALUES (?, ?)";
     const values = [
         participant.tournament_id, 
@@ -27,32 +28,22 @@ const addParticipant = (participant, done) => {
 
 const getParticipants = (tournament_id, done) => {
 
-    const sql = 'SELECT name, user_id FROM participants WHERE tournament_id=?';
+    const sql = 'SELECT name, participant_id FROM participants WHERE tournament_id=?';
     const participants = [];
-    console.log(tournament_id);
     
     db.each( sql, [tournament_id], (err, row) => {
         if(err) return done(err);
-        console.log(row.name);
-        //console.log("errorPos2");
+
         participants.push({
             name: row.name,
-            user_id: row.user_id
+            user_id: row.participant_id
         })
     },
-
-
     (err, num_rows) => {
         if(err) return done(err);
-        //console.log(participants);
-        console.log(participants);
-        //console.log("errorPos3");
-
-
 
         return done(null, {
             participants
-            
         })
     })
 }

@@ -26,15 +26,16 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
         db.run(`CREATE TABLE games(
                 game_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 tournament_id text,
+                round_id INTEGER,
                 home_participant_id INTEGER,
                 away_participant_id INTEGER,
                 home_score INTEGER,
                 away_score INTEGER,
                 winner_participant_id INTEGER,
                 FOREIGN KEY (tournament_id) REFERENCES tournaments(tournament_id),
-                FOREIGN KEY (home_participant_id) REFERENCES participants(user_id),
-                FOREIGN KEY (away_participant_id) REFERENCES participants(user_id),
-                FOREIGN KEY (winner_participant_id) REFERENCES participants(user_id)
+                FOREIGN KEY (home_participant_id) REFERENCES participants(participant_id),
+                FOREIGN KEY (away_participant_id) REFERENCES participants(participant_id),
+                FOREIGN KEY (winner_participant_id) REFERENCES participants(participant_id)
                 )`, (err) => {
                     if(err){
                         console.log('Games table already created');
