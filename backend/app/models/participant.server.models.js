@@ -22,35 +22,6 @@ const addParticipant = (participant, done) => {
     })
 }
 
-// const getParticipants = (tournament_id, done) => {
-
-//     const sql = 'SELECT name, user_id FROM participants WHERE tournament_id=?';
-//     const participants = [];
-//     console.log(tournament_id);
-    
-
-    
-//     db.each(sql, [tournament_id], function(err, participant_details){
-//         if(err) return done(err);
-//         console.log(participant_details);
-//         console.log("errorPos1");
-//         if(!participant_details) return done(404);
-//         participants.push({
-//             name: participant_details.name,
-//             user_id: participant_details.user_id
-//         })
-        
-
-        
-
-//         (err, num_rows) => {
-//             return done(null, {
-//                 participants
-//             })
-//         }
-    
-//     })
-// }
 
 //////////////////
 

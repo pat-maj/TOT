@@ -23,6 +23,7 @@ const create_tournament = (req, res) => {
         if(err) return res.sendStatus(500);
         return res.status(201).send({tournament_id: id});
     });
+
 }
 
 const get_tournament = (req,res) => {
@@ -45,6 +46,22 @@ function generate_random_string(length) {
     return result;
 }
 
+function generate_games(base) {
+
+    //setting up variables
+    const knownBrackets = [2,3,8,16,32,64];
+    var closest = _.find(knownBrackets, function(k) {return k>=base;})
+    var byes = closest-base;
+    if (byes>0) base = closest;
+    var brackets = [],
+    round = 1,
+    baseT = base/2,
+    baseC = base/2,
+    teamMark = 0,
+    nectInc = base/2;
+
+    
+}
 
 module.exports = {
     init_tournament,
