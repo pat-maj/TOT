@@ -1,12 +1,12 @@
 <script>
 export default{
     methods: {
-        navigate() {
-            location.href = this.page_URL;
-        }
+        // navigate() {
+        //     location.href = this.page_URL;
+        // }
     },
     props: {
-        page_URL: String,
+        //page_URL: String,
         text: String
     }
 }
@@ -14,6 +14,6 @@ export default{
 
 <template>
     <div class="d-grid col-4">
-        <button id="button" @click="navigate" class="btn btn-primary">{{ text }}</button>
+        <button id="button"  class="btn btn-primary" style="font-size: large;"><b>{{ text }}</b></button>
     </div>
 </template>

@@ -1,9 +1,17 @@
 <script>
 import LargeButton from '../components/LargeButton.vue'
+import { tournamentService } from '../services/tournament.service'
+
 export default {
     // data() {
 
     // }
+    methods: {
+        async initialiseTournament(page_URL) {
+            await tournamentService.initialiseTournament();
+            location.href = page_URL;
+        },
+    },
     components: {
         LargeButton
     }
@@ -11,10 +19,10 @@ export default {
 </script>
 
 <template>
-    <div class="d-flex flex-column align-items-center mt-5">
-        <div class="w-75">
+    <div class="d-flex flex-column justify-content-center align-items-center mt-5" style="height: 800px;">
+        <div class="w-75 border rounded p-5 shadow">
             <div class="mb-5">
-                <h1>Welcome to the Tournament Manager!</h1>
+                <h1 class="text-center mb-5">Welcome to the Tournament Manager!</h1>
                 <p>
                     Ready to organise and run tournaments with much more ease? Look no further! Tournament Manager is the platform 
                     that you'll use with ease to simply and flexibly organise and administer competitive events. It adapts to your needs, 
@@ -39,8 +47,8 @@ export default {
                     </ul>
                 </p>
             </div>
-            <div class="d-flex justify-content-center">
-                <LargeButton page_URL="/tournament-structure" text="Begin the Tournament!"/>
+            <div class="d-flex justify-content-center" style="height: 70px;">
+                <LargeButton text="Begin the Tournament!" @click="initialiseTournament('/tournament-structure')"/>
             </div>
         </div>
     </div>
