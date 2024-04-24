@@ -8,7 +8,7 @@ const router = createRouter({
   routes: [
     { path: '/', component: WelcomeView },
     { path: '/tournament-structure', component: TournamentStructureView},
-    { path: '/tournamnet-details', component: TournamentDetails}
+    { path: '/tournament-details', component: TournamentDetails}
   ]
 })
 

@@ -21,6 +21,40 @@ const initialiseTournament = async () => {
       }
 }
 
+const createTournament = (data) => {
+    console.log("http://localhost:3333/"+ data.tournament_id +"/tournament")
+    return fetch("http://localhost:3333/"+ data.tournament_id +"/tournament", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            "tournament_name": data.tournament_name,
+            "number_of_participants": data.number_of_participants,
+            "structure": data.structure,
+            "description": data.description
+        })
+    })
+    .then((response) => {
+        if(response.status === 201){
+            return 
+        }else if(response.status === 400){
+            throw "Bad request"
+        }else if(response.status === 401){
+            throw "Unauthorised"
+        }else if(response.status === 500){
+            throw "Server Error"
+        }else{
+            throw "Something went wrong"
+        }
+    })
+    .catch((error) => {
+        console.log(error)
+        return Promise.reject(error)
+    })
+}
+
 export const tournamentService = {
-    initialiseTournament
+    initialiseTournament,
+    createTournament
 }

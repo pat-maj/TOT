@@ -13,7 +13,7 @@ export default{
 </script>
 
 <template>
-    <div class="d-grid col-4">
+    <div class="d-grid col-5">
         <button id="button"  class="btn btn-primary" style="font-size: large;"><b>{{ text }}</b></button>
     </div>
 </template>
