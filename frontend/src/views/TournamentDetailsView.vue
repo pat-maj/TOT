@@ -7,20 +7,36 @@ export default{
         return{
             tournament_name: "",
             number_of_participants: "",
-            description: ""
+            description: "",
+            participants_names: ""
         }
     },
     methods: {
         createTournament() {
+            const tournament_id = JSON.parse(localStorage.getItem("tournament_id"));
+            const structure = JSON.parse(localStorage.getItem("structure"));
+
             const data = {
-                tournament_id: JSON.parse(localStorage.getItem("tournament_id")),
+                tournament_id: tournament_id,
                 tournament_name: this.tournament_name,
                 number_of_participants: this.number_of_participants,
-                structure: JSON.parse(localStorage.getItem("structure")),
+                structure: structure,
                 description: this.description
             }
 
             tournamentService.createTournament(data);
+
+            // Add each participant to the database
+            const participants = this.getNamesArray(this.participants_names);
+
+            participants.forEach(name => tournamentService.addParticipant(tournament_id, name));
+
+            location.href = "/" + structure + "/";
+        },
+        getNamesArray(namesString) {
+            const namesList = namesString.split('\n');
+            const trimmedNames = namesList.map(name => name.trim());
+            return trimmedNames;
         }
     },
     components:{

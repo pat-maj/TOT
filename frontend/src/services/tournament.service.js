@@ -22,7 +22,6 @@ const initialiseTournament = async () => {
 }
 
 const createTournament = (data) => {
-    console.log("http://localhost:3333/"+ data.tournament_id +"/tournament")
     return fetch("http://localhost:3333/"+ data.tournament_id +"/tournament", {
         method: "POST",
         headers: {
@@ -54,7 +53,37 @@ const createTournament = (data) => {
     })
 }
 
+const addParticipant = (tournament_id, name) => {
+    return fetch("http://localhost:3333/"+ tournament_id + "/participants/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            "participant_name": name
+        })
+    })
+    .then((response) => {
+        if(response.status === 201){
+            return 
+        }else if(response.status === 400){
+            throw "Bad request"
+        }else if(response.status === 401){
+            throw "Unauthorised"
+        }else if(response.status === 500){
+            throw "Server Error"
+        }else{
+            throw "Something went wrong"
+        }
+    })
+    .catch((error) => {
+        console.log(error)
+        return Promise.reject(error)
+    })
+}
+
 export const tournamentService = {
     initialiseTournament,
-    createTournament
+    createTournament,
+    addParticipant
 }

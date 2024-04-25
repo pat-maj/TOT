@@ -21,9 +21,9 @@ export default {
                 <h1>Choose Tournament Structure</h1>
             </div>
             <div class="d-flex flex-row flex-wrap justify-content-around">
-                <ImageBox @click="saveAndNavigate('singleElimination')" image_URL="src/assets/SingleElimination.png" title="Single Elimination" description="Participants compete in one-on-one matches; losers are immediately eliminated." />
-                <ImageBox @click="saveAndNavigate('doubleElimination')" image_URL="src/assets/DoubleElimination.png" title="Double Elimination" description="Participants get a second chance after their first loss, with a winners' and losers' bracket."/>
-                <ImageBox @click="saveAndNavigate('roundRobin')" image_URL="src/assets/RoundRobin.png" title="Round Robin" description="Each participant plays against every other participant, ensuring comprehensive competition."/>
+                <ImageBox @click="saveAndNavigate('single-elimination')" image_URL="src/assets/SingleElimination.png" title="Single Elimination" description="Participants compete in one-on-one matches; losers are immediately eliminated." />
+                <ImageBox @click="saveAndNavigate('double-elimination')" image_URL="src/assets/DoubleElimination.png" title="Double Elimination" description="Participants get a second chance after their first loss, with a winners' and losers' bracket."/>
+                <ImageBox @click="saveAndNavigate('round-robin')" image_URL="src/assets/RoundRobin.png" title="Round Robin" description="Each participant plays against every other participant, ensuring comprehensive competition."/>
                 <ImageBox @click="saveAndNavigate('swiss')" image_URL="src/assets/Swiss.png" title="Swiss System" description="Players face others with similar scores in successive rounds without elimination."/>
                 <ImageBox @click="saveAndNavigate('consolation')" image_URL="src/assets/Consolation.png" title="Consolation Bracket" description="A secondary competition for those knocked out early, ensuring more play opportunities."/>
                 <ImageBox @click="saveAndNavigate('stableford')" image_URL="src/assets/Stableford.png" title="Stableford" description="A point-based scoring system that rewards performance on individual holes in golf."/>
