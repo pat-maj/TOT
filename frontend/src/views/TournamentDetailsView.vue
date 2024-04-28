@@ -24,7 +24,9 @@ export default{
                 description: this.description
             }
 
-            tournamentService.createTournament(data);
+            const tournamentData = tournamentService.createTournament(data);
+
+            console.log(tournamentData.tournament_id);
 
             // Add each participant to the database
             const participants = this.getNamesArray(this.participants_names);

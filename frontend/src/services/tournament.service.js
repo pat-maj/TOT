@@ -82,8 +82,35 @@ const addParticipant = (tournament_id, name) => {
     })
 }
 
+const getTournamentData = (tournament_id) => {
+    return fetch("http://localhost:3333/"+ tournament_id +"/tournament", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then((response) => {
+        if(response.status === 201){
+            return response.json()
+        }else if(response.status === 400){
+            throw "Bad request"
+        }else if(response.status === 401){
+            throw "Unauthorised"
+        }else if(response.status === 500){
+            throw "Server Error"
+        }else{
+            throw "Something went wrong"
+        }
+    })
+    .catch((error) => {
+        console.log(error)
+        return Promise.reject(error)
+    })
+}
+
 export const tournamentService = {
     initialiseTournament,
     createTournament,
-    addParticipant
+    addParticipant,
+    getTournamentData
 }
