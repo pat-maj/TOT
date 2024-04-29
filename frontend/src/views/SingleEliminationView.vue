@@ -1,7 +1,7 @@
 <template>
   <div class="single-elimination-view">
     <h1>{{ tournamentName }}</h1>
-    <h2>{{ gameName }}</h2>
+    <h2>{{ description }}</h2>
     <div class="bracket">
       <div v-for="(round, roundIndex) in bracket" :key="roundIndex" class="round">
         <div v-for="(match, matchIndex) in round" :key="matchIndex" class="match">
@@ -27,12 +27,12 @@ export default {
   data() {
     return {
       tournamentName: "",
-      gameName: "",
+      description: "",
       bracket: [],
     };
   },
-  mounted() {
-    const tournamentId = localStorage.getItem("tournament_id");
+  created() {
+    const tournamentId = JSON.parse(localStorage.getItem("tournament_id"));
 
     this.getTournamentData(tournamentId);
   },
@@ -41,7 +41,7 @@ export default {
       tournamentService.getTournamentData(tournamentId)
         .then((data) => {
           this.tournamentName = data.tournament_name;
-          this.gameName = data.game_name;
+          this.description = data.description;
           this.generateBracket(data.number_of_participants);
         })
         .catch((error) => {
@@ -54,25 +54,37 @@ export default {
       const totalMatches = Math.pow(2, rounds - 1);
       let matchesPerRound = totalMatches;
 
-      for (let i = 0; i < rounds; i++) {
+      for (let i = 0; i <= rounds; i++) {
         const round = [];
 
         for (let j = 0; j < matchesPerRound; j++) {
           round.push({
-            homeTeam: "",
-            awayTeam: "",
+            homeTeam: "a",
+            awayTeam: "b",
             winner: "",
           });
         }
 
         bracket.push(round);
+        console.log(bracket);
         matchesPerRound /= 2;
       }
 
       this.bracket = bracket;
     },
     selectWinner(roundIndex, matchIndex, winner) {
-      this.$set(this.bracket[roundIndex][matchIndex], "winner", winner);
+      // this.bracket[roundIndex][matchIndex], "winner", winner;
+      // console.log(roundIndex + " " + matchIndex + " " + winner);
+      // console.log(this.bracket);
+
+      const match = this.bracket[roundIndex][matchIndex];
+
+      // Determine the winner based on the 'team' argument
+      if (winner === 'home') {
+        match.winner = match.homeTeam;
+      } else if (winner === 'away') {
+        match.winner = match.awayTeam;
+      }
     },
   },
 };

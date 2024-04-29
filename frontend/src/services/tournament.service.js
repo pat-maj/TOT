@@ -83,14 +83,14 @@ const addParticipant = (tournament_id, name) => {
 }
 
 const getTournamentData = (tournament_id) => {
-    return fetch("http://localhost:3333/"+ tournament_id +"/tournament", {
+    return fetch("http://localhost:3333/"+ tournament_id +"/tournament/", {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
         }
     })
     .then((response) => {
-        if(response.status === 201){
+        if(response.status === 200){
             return response.json()
         }else if(response.status === 400){
             throw "Bad request"
