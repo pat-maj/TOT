@@ -4,21 +4,24 @@
     <h2>{{ description }}</h2>
     <div class="bracket">
       <div v-for="(round, roundIndex) in bracket" :key="roundIndex" class="round">
-        <div v-for="(match, matchIndex) in round" :key="matchIndex" class="match">
-          <div class="team" v-if="match.homeTeam" @click="selectWinner(roundIndex, matchIndex, 'home')">
+        <div class="match" v-for="(match, matchIndex) in round" :key="matchIndex">
+          <div class="team" v-if="match.winner !== match.homeTeam && match.winner !== match.awayTeam" @click="selectWinner(roundIndex, matchIndex, 'home')">
             {{ match.homeTeam }}
           </div>
-          <div class="team" v-if="match.awayTeam" @click="selectWinner(roundIndex, matchIndex, 'away')">
+          <div class="team" v-if="match.winner !== match.homeTeam && match.winner !== match.awayTeam" @click="selectWinner(roundIndex, matchIndex, 'away')">
             {{ match.awayTeam }}
-          </div>
-          <div class="team winner" v-if="match.winner">
-            {{ match.winner }}
           </div>
         </div>
       </div>
     </div>
+    <div class="final-round" v-if="finalWinner">
+      <h3>Final Winner</h3>
+      <div class="team">{{ finalWinner }}</div>
+    </div>
+    <div v-else class="final-round-placeholder">Final Winner will be displayed here</div>
   </div>
 </template>
+
 
 <script>
 import { tournamentService } from '../services/tournament.service';
@@ -29,66 +32,101 @@ export default {
       tournamentName: "",
       description: "",
       bracket: [],
+      finalRound: false,
     };
   },
+
   created() {
     const tournamentId = JSON.parse(localStorage.getItem("tournament_id"));
-
     this.getTournamentData(tournamentId);
   },
+
+  computed: {
+    finalWinner() {
+      if (this.bracket.length > 0) {
+        const finalMatch = this.bracket[this.bracket.length - 1][0];
+        if (finalMatch && finalMatch.winner) {
+          return finalMatch.winner;
+        }
+      }
+      return null;
+    }
+  },
+
   methods: {
     getTournamentData(tournamentId) {
       tournamentService.getTournamentData(tournamentId)
         .then((data) => {
           this.tournamentName = data.tournament_name;
           this.description = data.description;
-          this.generateBracket(data.number_of_participants);
+          this.generateBracket(data.participants);
         })
         .catch((error) => {
           console.error("Error retrieving tournament data:", error);
         });
     },
-    generateBracket(numberOfParticipants) {
+
+    generateBracket(participants) {
       const bracket = [];
+      const numberOfParticipants = participants.length;
       const rounds = Math.ceil(Math.log2(numberOfParticipants));
-      const totalMatches = Math.pow(2, rounds - 1);
-      let matchesPerRound = totalMatches;
-
-      for (let i = 0; i <= rounds; i++) {
+      const totalMatches = Math.pow(2, rounds);
+      
+      let participantsIndex = 0;
+      for (let i = 0; i < rounds; i++) {
         const round = [];
-
+        const matchesPerRound = totalMatches / Math.pow(2, i + 1);
         for (let j = 0; j < matchesPerRound; j++) {
+          const homeTeam = participants[participantsIndex++] || null;
+          const awayTeam = participants[participantsIndex++] || null;
           round.push({
-            homeTeam: "a",
-            awayTeam: "b",
+            homeTeam: homeTeam ? homeTeam.name : null,
+            awayTeam: awayTeam ? awayTeam.name : null,
             winner: "",
           });
         }
-
         bracket.push(round);
-        console.log(bracket);
-        matchesPerRound /= 2;
       }
 
       this.bracket = bracket;
     },
+
     selectWinner(roundIndex, matchIndex, winner) {
-      // this.bracket[roundIndex][matchIndex], "winner", winner;
-      // console.log(roundIndex + " " + matchIndex + " " + winner);
-      // console.log(this.bracket);
+      const currentMatch = this.bracket[roundIndex][matchIndex];
+      const nextRoundIndex = roundIndex + 1;
 
-      const match = this.bracket[roundIndex][matchIndex];
-
-      // Determine the winner based on the 'team' argument
       if (winner === 'home') {
-        match.winner = match.homeTeam;
+        currentMatch.winner = currentMatch.homeTeam;
+        if (this.bracket[nextRoundIndex]) {
+          const opponentIndex = matchIndex % 2 === 0 ? matchIndex + 1 : matchIndex - 1;
+          const opponentMatch = this.bracket[nextRoundIndex][Math.floor(opponentIndex / 2)];
+          if (!opponentMatch.winner) {
+            if (opponentIndex % 2 === 0) {
+              opponentMatch.awayTeam = currentMatch.homeTeam;
+            } else {
+              opponentMatch.homeTeam = currentMatch.homeTeam;
+            }
+          }
+        }
       } else if (winner === 'away') {
-        match.winner = match.awayTeam;
+        currentMatch.winner = currentMatch.awayTeam;
+        if (this.bracket[nextRoundIndex]) {
+          const opponentIndex = matchIndex % 2 === 0 ? matchIndex + 1 : matchIndex - 1;
+          const opponentMatch = this.bracket[nextRoundIndex][Math.floor(opponentIndex / 2)];
+          if (!opponentMatch.winner) {
+            if (opponentIndex % 2 === 0) {
+              opponentMatch.awayTeam = currentMatch.awayTeam;
+            } else {
+              opponentMatch.homeTeam = currentMatch.awayTeam;
+            }
+          }
+        }
       }
     },
   },
 };
 </script>
+
 
 <style scoped>
 .single-elimination-view {
@@ -99,7 +137,7 @@ export default {
 
 .bracket {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
 }
 
@@ -107,26 +145,60 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
+  margin-right: 50px;
 }
 
 .match {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .team {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100px;
-  height: 40px;
+  width: 150px;
+  height: 60px;
   border: 1px solid black;
   cursor: pointer;
 }
 
+.team:not(:last-child) {
+  margin-bottom: 10px;
+}
+
 .team.winner {
   font-weight: bold;
+}
+
+.final-round {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.final-round .match {
+  margin-bottom: 20px;
+}
+
+.final-round .team {
+  width: 150px;
+  height: 60px;
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.final-round .team.winner {
+  font-weight: bold;
+}
+
+.final-round-placeholder {
+  margin-top: 50px;
+  font-weight: bold;
+  font-size: 24px;
 }
 </style>
