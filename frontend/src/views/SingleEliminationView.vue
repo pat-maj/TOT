@@ -69,16 +69,18 @@ export default {
     generateBracket(participants) {
       const bracket = [];
       const numberOfParticipants = participants.length;
-      const rounds = Math.ceil(Math.log2(numberOfParticipants));
-      const totalMatches = Math.pow(2, rounds);
-      
+      const rounds = Math.log2(numberOfParticipants);
+      const totalMatches = numberOfParticipants / 2;
+  
       let participantsIndex = 0;
       for (let i = 0; i < rounds; i++) {
         const round = [];
-        const matchesPerRound = totalMatches / Math.pow(2, i + 1);
+        const matchesPerRound = totalMatches / Math.pow(2, i);
         for (let j = 0; j < matchesPerRound; j++) {
-          const homeTeam = participants[participantsIndex++] || null;
-          const awayTeam = participants[participantsIndex++] || null;
+          const homeTeam = participants[participantsIndex] || null;
+          participantsIndex++;
+          const awayTeam = participants[participantsIndex] || null;
+          participantsIndex++;
           round.push({
             homeTeam: homeTeam ? homeTeam.name : null,
             awayTeam: awayTeam ? awayTeam.name : null,
@@ -87,9 +89,9 @@ export default {
         }
         bracket.push(round);
       }
-
       this.bracket = bracket;
     },
+
 
     selectWinner(roundIndex, matchIndex, winner) {
       const currentMatch = this.bracket[roundIndex][matchIndex];
