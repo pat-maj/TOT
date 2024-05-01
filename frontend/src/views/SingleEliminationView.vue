@@ -1,24 +1,33 @@
 <template>
-  <div class="single-elimination-view">
+  <div class="single-elimination-view d-flex flex-column align-items-center mt-5 mb-5">
+    <div class="w-75 border rounded p-5 shadow">
+    <div class="d-flex flex-column align-items-center">
     <h1>{{ tournamentName }}</h1>
-    <h2>{{ description }}</h2>
-    <div class="bracket">
+    <h3 class="mt-3 w-75 text-center description">{{ description }}</h3>
+    <div class="bracket mt-5">
       <div v-for="(round, roundIndex) in bracket" :key="roundIndex" class="round">
-        <div class="match" v-for="(match, matchIndex) in round" :key="matchIndex">
+        <h3 v-if="hasUnfinishedMatches(round)" class="mb-3">Round {{ roundIndex + 1 }}</h3>
+        <div class="match mb-5" v-for="(match, matchIndex) in round" :key="matchIndex">
           <div class="team" v-if="match.winner !== match.homeTeam && match.winner !== match.awayTeam" @click="selectWinner(roundIndex, matchIndex, 'home')">
             {{ match.homeTeam }}
           </div>
+          <div class="mb-1" v-if="match.winner !== match.homeTeam && match.winner !== match.awayTeam"><h6>VS</h6></div>
           <div class="team" v-if="match.winner !== match.homeTeam && match.winner !== match.awayTeam" @click="selectWinner(roundIndex, matchIndex, 'away')">
             {{ match.awayTeam }}
           </div>
         </div>
       </div>
     </div>
-    <div class="final-round" v-if="finalWinner">
-      <h3>Final Winner</h3>
-      <div class="team">{{ finalWinner }}</div>
+    <div class="final-round minus-margin" v-if="finalWinner">
+      <div class="border rounded p-5">
+        <div class="d-flex flex-column align-items-center">
+          <h1 class="mb-4">Final Winner</h1>
+          <div class="team mb-3">{{ finalWinner }}</div>
+        </div>
+      </div>
     </div>
-    <div v-else class="final-round-placeholder">Final Winner will be displayed here</div>
+    </div>
+    </div>
   </div>
 </template>
 
@@ -125,6 +134,10 @@ export default {
         }
       }
     },
+
+    hasUnfinishedMatches(round) {
+      return round.some(match => match.winner === '');
+    }
   },
 };
 </script>
@@ -165,6 +178,7 @@ export default {
   height: 60px;
   border: 1px solid black;
   cursor: pointer;
+  border-radius: 20px;
 }
 
 .team:not(:last-child) {
@@ -202,5 +216,13 @@ export default {
   margin-top: 50px;
   font-weight: bold;
   font-size: 24px;
+}
+
+.minus-margin {
+  margin-top: -150px;
+}
+
+.description {
+  color: #525252;
 }
 </style>

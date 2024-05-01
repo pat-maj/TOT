@@ -27,8 +27,8 @@ export default {
                 <ImageBox @click="saveAndNavigate('swiss')" image_URL="src/assets/Swiss.png" title="Swiss System" description="Players face others with similar scores in successive rounds without elimination."/>
                 <ImageBox @click="saveAndNavigate('consolation')" image_URL="src/assets/Consolation.png" title="Consolation Bracket" description="A secondary competition for those knocked out early, ensuring more play opportunities."/>
                 <ImageBox @click="saveAndNavigate('stableford')" image_URL="src/assets/Stableford.png" title="Stableford" description="A point-based scoring system that rewards performance on individual holes in golf."/>
-                <ImageBox @click="saveAndNavigate('multilevel')" image_URL="src/assets/image.png" title="Multilevel Tournament" description="A tiered competition format with participants moving between levels based on performance."/>
-                <ImageBox @click="saveAndNavigate('league')" image_URL="src/assets/image.png" title="League" description="Teams or players compete in a scheduled series of games against each other."/>
+                <ImageBox @click="saveAndNavigate('multilevel')" image_URL="src/assets/MultiLevel.png" title="Multilevel Tournament" description="A tiered competition format with participants moving between levels based on performance."/>
+                <ImageBox @click="saveAndNavigate('league')" image_URL="src/assets/League.png" title="League" description="Teams or players compete in a scheduled series of games against each other."/>
             </div>
         </div>
     </div>
